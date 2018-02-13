@@ -24,6 +24,12 @@ import checkIfFirstLaunch from './src/checkIfFirstLaunch';
 const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 const themeStyles = GetStyle();
 
+// REMOVE ME //
+import { hitDatabaseSAMPLE } from './src/helpers/ApiWrappers.js';
+hitDatabaseSAMPLE(39);
+//^^^REMOVE^^^//
+
+
 function cacheImages(images) {
   return images.map(image => {
     if (typeof image === 'string') {

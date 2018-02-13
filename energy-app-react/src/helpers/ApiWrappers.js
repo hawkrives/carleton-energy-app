@@ -769,3 +769,91 @@ function getYearGraph(currDate, type) {
         return getTotalWindGenerationGraphFormat(comparisonDate, currDate, 525600, 365);
     }
 }
+
+function dateToTimestamp(date) {
+    // convert from 'Mon Jan 21 2013 22:00:00 GMT-0600 (CST)' format to '2013-01-22%2022:00:00' format
+    year = date.getFullYear();
+    month = date.getMonth()+1;
+    day = date.getDate();
+    hours = date.getHours();
+    console.log(hours);
+
+    if (month < 10) {
+        month = '0'+month;
+    }
+    if (day < 10) {
+        day = '0'+day;
+    }
+    if (hours < 10) {
+        hours = '0'+hours;
+    }
+
+    timestamp = year+'-'+month+'-'+day+'%20'+hours+':00:00';
+    // console.log(timestamp);
+    return timestamp;
+
+}
+
+function timestampToDate(timestamp){
+    // convert from '2013-01-22%2000:22:00' format to 'Mon Jan 21 2013 22:00:00 GMT-0600 (CST)' format
+    year = timestamp.toString().substring(0,4);
+    month = (Number(timestamp.toString().substring(5,7))-1)%12;
+    day = timestamp.toString().substring(8,10);
+    hours = timestamp.toString().substring(11,13);
+
+    newDate = new Date(year, month, day, hours, "00", "00", "00");
+    return newDate;
+}
+
+export function hitDatabaseSAMPLE(buildingID) {
+    var startDate = new Date("2013", "00", "21", "15", "00", "00", "00");
+    var endDate = new Date("2013", "0", "22", "00", "00", "00", "00");
+
+    var start = dateToTimestamp(startDate)
+    var end = dateToTimestamp(endDate)
+
+    var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+start+'/'+end+'/source/1';
+
+    console.log(url);
+
+    return fetch(url)
+        .then((response) => response.json())
+        .then((responseJson) => {
+
+          for (let i =0; i < responseJson.length - 1; i++) {
+            obj = responseJson[i];
+
+            name = obj.pointname.substring(0,obj.pointname.indexOf("-")-1);
+            timestamp = obj.pointtimestamp;
+            val = obj.pointvalue;
+            units = obj.units;
+
+            // switch (units) {
+            //     case 'kBUTU':
+            //         utility = 'Heat';
+            //         break;
+            //     case 'kWh':
+            //         utility = 'Electricity';
+            //         break;
+            //     case 'gal':
+            //         utility = 'Water';
+            //         break;
+            // }
+
+            utility = obj.pointname.substring(obj.pointname.indexOf("-")+2);
+
+            newDate = timestampToDate(timestamp);
+
+            console.log(name + ' ' + newDate + ' ' +  val + ' ' +  units +' '+ utility);
+          };
+
+          return responseJson.movies;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+    // var jsonResponse = fetch('https://facebook.github.io/react-native/movies.json');
+    // console.log(jsonResponse); 
+}
+// 

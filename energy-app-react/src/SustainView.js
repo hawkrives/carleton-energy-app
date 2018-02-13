@@ -232,8 +232,8 @@ const styles = StyleSheet.create({
         color: '#529353'
     },
     image: {
-        width: moderateScale(40),
-        height: moderateScale(40),
+        // width: moderateScale(40),
+        // height: moderateScale(40),
     },
     list: {
         marginBottom: 12,
