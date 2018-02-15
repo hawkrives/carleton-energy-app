@@ -3,6 +3,7 @@ import news from './SustainabilityNews';
 import events from './SustainabilityEvents';
 
 import { JanData, eTable, wTable, sTable } from './../assets/data/JanData.js';
+import buildings from './../Buildings.js';
 
 import {
     solarProduction,
@@ -776,7 +777,7 @@ function dateToTimestamp(date) {
     month = date.getMonth()+1;
     day = date.getDate();
     hours = date.getHours();
-    console.log(hours);
+    // console.log(hours);
 
     if (month < 10) {
         month = '0'+month;
@@ -805,49 +806,57 @@ function timestampToDate(timestamp){
     return newDate;
 }
 
-export function hitDatabaseSAMPLE(buildingID) {
-    var startDate = new Date("2013", "00", "21", "15", "00", "00", "00");
-    var endDate = new Date("2013", "0", "22", "00", "00", "00", "00");
+export function getBuildingDataOverTime(buildingName, startDate, endDate) {
 
     var start = dateToTimestamp(startDate)
     var end = dateToTimestamp(endDate)
 
-    var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+start+'/'+end+'/source/1';
+    var buildingID = null;
+    for (let i=0;i<buildings.length;i++){
+        if (buildings[i].name == buildingName) {
+            buildingID = buildings[i].apiVal;
+        }
+    }
+    if (buildingID == null){
+        // console.log("WHOOPS");
+    }
 
+    var url = 'http://energycomps.its.carleton.edu/api/index.php/values/building/'+buildingID+'/'+start+'/'+end+'/source/1';
     console.log(url);
 
-    return fetch(url)
-        .then((response) => response.json())
-        .then((responseJson) => {
+    fetch(url).then((response) => response.json()).then((responseJson) => {
 
-          for (let i =0; i < responseJson.length - 1; i++) {
-            obj = responseJson[i];
+        if (responseJson.length == 0) {
+            console.log("NO DATA");
+        }
 
-            name = obj.pointname.substring(0,obj.pointname.indexOf("-")-1);
-            timestamp = obj.pointtimestamp;
-            val = obj.pointvalue;
-            units = obj.units;
+      for (let i =0; i < responseJson.length - 1; i++) {
+        obj = responseJson[i];
 
-            // switch (units) {
-            //     case 'kBUTU':
-            //         utility = 'Heat';
-            //         break;
-            //     case 'kWh':
-            //         utility = 'Electricity';
-            //         break;
-            //     case 'gal':
-            //         utility = 'Water';
-            //         break;
-            // }
+        name = obj.pointname.substring(0,obj.pointname.indexOf("-")-1);
+        timestamp = obj.pointtimestamp;
+        val = obj.pointvalue.toFixed(2);
+        units = obj.units;
 
-            utility = obj.pointname.substring(obj.pointname.indexOf("-")+2);
+        // utility = obj.pointname.substring(obj.pointname.indexOf("-")+2);
 
-            newDate = timestampToDate(timestamp);
+        switch (units) {
+            case 'kBTU':
+                utility = 'Heat';
+                break;
+            case 'kWh':
+                utility = 'Electricity';
+                break;
+            case 'gal':
+                utility = 'Water';
+                break;
+        }
 
-            console.log(name + ' ' + newDate + ' ' +  val + ' ' +  units +' '+ utility);
-          };
+        newDate = timestampToDate(timestamp);
 
-          return responseJson.movies;
+        console.log(name + ' ' + newDate + ' ' +  val + ' ' +  units +' '+ utility);
+      };
+
     })
     .catch((error) => {
       console.error(error);
@@ -856,4 +865,17 @@ export function hitDatabaseSAMPLE(buildingID) {
     // var jsonResponse = fetch('https://facebook.github.io/react-native/movies.json');
     // console.log(jsonResponse); 
 }
-// 
+
+export function getBuildingDataOverPastWeek(buildingName){
+    var endDate = new Date();
+    var startDate = new Date();
+    startDate.setDate(endDate.getDate() - 7);
+    getBuildingDataOverTime(buildingName, startDate, endDate);
+}
+
+export function getBuildingDataOverPastMonth(buildingName){
+    var endDate = new Date();
+    var startDate = new Date();
+    startDate.setMonth(endDate.getMonth() - 1);
+    getBuildingDataOverTime(buildingName, startDate, endDate);
+}

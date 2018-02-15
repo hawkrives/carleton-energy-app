@@ -25,8 +25,14 @@ const apiGoogleKey = 'AIzaSyA2Q45_33Ot6Jr4EExQhVByJGkucecadyI';
 const themeStyles = GetStyle();
 
 // REMOVE ME //
-import { hitDatabaseSAMPLE } from './src/helpers/ApiWrappers.js';
-hitDatabaseSAMPLE(39);
+import { getBuildingDataOverTime, getBuildingDataOverPastWeek, getBuildingDataOverPastMonth } from './src/helpers/ApiWrappers.js';
+
+var startDate = new Date("2013", "11", "31", "00", "00", "00", "00");
+var endDate = new Date("2014", "00", "01", "00", "00", "00", "00");
+
+// getBuildingDataOverTime("Burton", startDate, endDate);
+getBuildingDataOverPastWeek("Myers");
+// getBuildingDataOverPastMonth("Severance");
 //^^^REMOVE^^^//
 
 

@@ -1,0 +1,111 @@
+DATA ISSUES:
+
+NOTE: some data apparently don't go back as far as 2013 -- 
+	the observations below are from between 2017 and 2018
+
+	Cassat:
+		'40' has no water data (only electricity & heat)
+		'41' has no electricity data (only water & heat)
+	James:
+		50: only electricity usage (no water or heating)
+		51: solar consumption or production?? It's mostly 0 values
+	Goodhue:
+		Naming mismatch: "Goodhue" vs. "Goodhue Hall"
+		47: electricity only
+		48: water & heat only
+	Olin:
+		7: only heat
+		8: should be ok -- looks like everything's there
+	Leighton:
+		53: heat only 
+		54: electricity only
+
+	Myers:
+		All but electrical data stop around december of 2017
+
+	Haven't tried all the others, just those with more than 1 possible lookup value
+
+
+SPEED:
+	getBuildingDataOverPastMonth("Burton") takes 12 seconds to return JSON
+
+
+DATABASE NAMING:
+
+{"LDC":1,
+
+"Libe":2,
+
+"Rec":3,
+
+"Hulings":4,
+
+"Gould Library":5,
+
+"Hulings Hall":6,
+
+"Olin Hall ":7,
+"Olin Hall":8,
+
+"Recreation Center":9,
+
+"Sayles-Hill Campus Center":10,
+
+"Evans":27,
+
+"Boliou Hall":38,
+
+"Burton Hall":39,
+
+"Cassat Hall":40,
+"Cassat Hall\/James Hall":41,
+
+"CMC":42,
+
+"Cowling Gym":43,
+
+"Davis Hall":44,
+
+"Evans Hall":45,
+
+"Faculty Club":46,
+
+"Goodhue":47,
+"Goodhue Hall":48,
+
+"Goodsell":49,
+
+"James":50,
+
+"James Hall":51,
+
+"Laird Hall":52,
+
+"Leighton Hall ":53,
+"Leighton Hall":54,
+
+"Main Campus":55,
+
+"Music Hall":56,
+
+"Musser Hall":57,
+
+"Myers Hall":58,
+
+"Nourse Hall":59,
+
+"Scoville Hall":60,
+
+"Severance Hall":61,
+
+"Skinner Chapel":62,
+
+"Student Townhouses":63,
+
+"Watson Hall":64,
+
+"Weitz Center for Creativity":65,
+
+"West Gym":66,
+
+"Willis Hall":67}
